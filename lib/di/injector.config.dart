@@ -10,7 +10,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:fashion_shop/core/env/app_config.dart' as _i188;
+import 'package:fashion_shop/data/datasource/local/secure_storage.dart'
+    as _i280;
 import 'package:fashion_shop/di/env_module.dart' as _i948;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -43,6 +46,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => appModule.stagingBaseUrl(gh<_i188.AppConfig>()),
       instanceName: 'baseUrl',
       registerFor: {_staging},
+    );
+    gh.singleton<_i280.SecureStorage>(
+      () => _i280.SecureStorage(gh<_i558.FlutterSecureStorage>()),
     );
     gh.singleton<_i188.AppConfig>(
       () => appModule.prodConfig(),
