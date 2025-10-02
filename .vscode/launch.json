@@ -4,41 +4,23 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
-            "name": "fashion_shop dev",
+            "name": "fashion shop app",
             "request": "launch",
-            "type": "dart",
-            "program": "lib/main_dev.dart",
-            "args": [
-                "--flavor",
-                "dev",
-                "-t",
-                "lib/main_dev.dart"
-            ]
+            "type": "dart"
         },
         {
-            "name": "fashion_shop staging",
+            "name": "fashion shop app (profile mode)",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_staging.dart",
-            "args": [
-                "--flavor",
-                "staging",
-                "-t",
-                "lib/main_staging.dart"
-            ]
+            "flutterMode": "profile"
         },
         {
-            "name": "fashion_shop prod",
+            "name": "fashion shop app (release mode)",
             "request": "launch",
             "type": "dart",
-            "program": "lib/main_prod.dart",
-            "args": [
-                "--flavor",
-                "prod",
-                "-t",
-                "lib/main_prod.dart"
-            ]
+            "flutterMode": "release"
         }
     ]
 }
