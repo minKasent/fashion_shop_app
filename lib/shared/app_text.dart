@@ -1,5 +1,5 @@
 import 'package:fashion_shop/shared/app_typography.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppText extends StatelessWidget {
   final String content;
@@ -9,6 +9,6 @@ class AppText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(content, style: style ?? AppTypography.text16w600, textAlign: textAlign ?? TextAlign.center, overflow: TextOverflow.ellipsis);
+    return Text(content, style: style ?? AppTypography.text32w700, textAlign: textAlign ?? TextAlign.center, overflow: TextOverflow.ellipsis);
   }
 }

@@ -46,7 +46,7 @@ class CommonDialogs {
           backgroundColor: AppColorSchemes.grey,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(40),
-            side: BorderSide(color: AppColorSchemes.green),
+            side: BorderSide(color: AppColorSchemes.grey),
           ),
           contentPadding: const EdgeInsets.all(16),
           content: Column(
@@ -61,7 +61,7 @@ class CommonDialogs {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: AppColorSchemes.green),
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: AppColorSchemes.grey),
                 ),
               ],
               const SizedBox(height: 8),
@@ -69,7 +69,7 @@ class CommonDialogs {
               Text(
                 message ?? 'Something went wrong',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: AppColorSchemes.blue),
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: AppColorSchemes.grey),
               ),
               const SizedBox(height: 32),
               // Buttons
@@ -80,7 +80,7 @@ class CommonDialogs {
                 },
                 child: Text(
                   'OK',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColorSchemes.blue),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColorSchemes.grey),
                 ),
               ),
             ],
@@ -108,7 +108,7 @@ class CommonDialogs {
           backgroundColor: AppColorSchemes.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: BorderSide(color: AppColorSchemes.lightWhite),
+            side: BorderSide(color: AppColorSchemes.white),
           ),
           contentPadding: const EdgeInsets.all(16),
           content: Column(
@@ -122,7 +122,7 @@ class CommonDialogs {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: AppColorSchemes.blue),
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: AppColorSchemes.grey),
                 ),
               ],
               const SizedBox(height: 8),
@@ -133,7 +133,7 @@ class CommonDialogs {
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: title != null ? 14 : 18,
-                  color: title != null ? AppColorSchemes.lightWhite : AppColorSchemes.white,
+                  color: title != null ? AppColorSchemes.white : AppColorSchemes.white,
                 ),
               ),
               const SizedBox(height: 32),
