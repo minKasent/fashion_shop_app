@@ -14,6 +14,7 @@ import 'package:fashion_shop/core/logging/app_logger.dart' as _i673;
 import 'package:fashion_shop/core/logging/console_app_logger.dart' as _i1049;
 import 'package:fashion_shop/di/third_party_module.dart' as _i252;
 import 'package:fashion_shop/repositories/auth_repository.dart' as _i840;
+import 'package:fashion_shop/screens/setting/cubit/setting_cubit.dart' as _i325;
 import 'package:fashion_shop/services/remote/firebase_service.dart' as _i488;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
@@ -43,6 +44,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i488.FirebaseService(
         gh<_i59.FirebaseAuth>(),
         gh<_i974.FirebaseFirestore>(),
+        gh<_i673.AppLogger>(),
+      ),
+    );
+    gh.factory<_i325.SettingCubit>(
+      () => _i325.SettingCubit(
+        gh<_i488.FirebaseService>(),
         gh<_i673.AppLogger>(),
       ),
     );

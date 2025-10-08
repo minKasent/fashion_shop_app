@@ -95,7 +95,7 @@ class _SignInViewState extends State<SignInView> {
               onTap: () => context.read<SignInCubit>().onClearSignInErrorMessage(),
             );
           } else if (state.isSuccess) {
-            context.go(RouteName.home);
+            context.go(RouteName.setting);
           }
         }
       },
