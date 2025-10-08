@@ -6,4 +6,6 @@ class AppColorSchemes {
   static final Color black = Color(0xFF000000);
   static final Color grey = Color(0xFFF4F4F4);
   static final Color darkGrey = Color(0xFF8E8E8E);
+  static final Color red = Color(0xFFF00000);
+
 }
