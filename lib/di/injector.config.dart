@@ -14,6 +14,8 @@ import 'package:fashion_shop/core/logging/app_logger.dart' as _i673;
 import 'package:fashion_shop/core/logging/console_app_logger.dart' as _i1049;
 import 'package:fashion_shop/di/third_party_module.dart' as _i252;
 import 'package:fashion_shop/repositories/auth_repository.dart' as _i840;
+import 'package:fashion_shop/repositories/user_repository.dart' as _i37;
+import 'package:fashion_shop/screens/address/cubit/address_cubit.dart' as _i273;
 import 'package:fashion_shop/screens/setting/cubit/setting_cubit.dart' as _i325;
 import 'package:fashion_shop/services/remote/firebase_service.dart' as _i488;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
@@ -47,17 +49,25 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i673.AppLogger>(),
       ),
     );
-    gh.factory<_i325.SettingCubit>(
-      () => _i325.SettingCubit(
-        gh<_i488.FirebaseService>(),
-        gh<_i673.AppLogger>(),
-      ),
-    );
     gh.lazySingleton<_i840.AuthRepository>(
       () => _i840.AuthRepository(
         gh<_i488.FirebaseService>(),
         gh<_i673.AppLogger>(),
       ),
+    );
+    gh.lazySingleton<_i37.UserRepository>(
+      () => _i37.UserRepository(
+        gh<_i488.FirebaseService>(),
+        gh<_i673.AppLogger>(),
+      ),
+    );
+    gh.lazySingleton<_i273.AddressCubit>(
+      () =>
+          _i273.AddressCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
+    );
+    gh.lazySingleton<_i325.SettingCubit>(
+      () =>
+          _i325.SettingCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
     );
     return this;
   }

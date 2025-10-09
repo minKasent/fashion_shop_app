@@ -19,6 +19,7 @@ class AuthRepository {
       await _firebaseService.createUserWithEmailAndPassword(email: email, password: password, firstName: firstName, lastName: lastName);
     } catch (e, stackTrace) {
       _logger.e('Error creating user with email and password', error: e, stackTrace: stackTrace);
+      rethrow;
     }
   }
 
@@ -27,6 +28,7 @@ class AuthRepository {
       await _firebaseService.signInWithEmailAndPassword(email: email, password: password);
     } catch (e, stackTrace) {
       _logger.e('Error signing in with email and password', error: e, stackTrace: stackTrace);
+      rethrow;
     }
   }
 }

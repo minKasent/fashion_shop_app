@@ -25,7 +25,7 @@ mixin _$UserModel {
   String get email => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $UserModelCopyWith<$Res> {
     String email,
     String firstName,
     String lastName,
-    DateTime createdAt,
+    String createdAt,
   });
 }
 
@@ -93,7 +93,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
             createdAt: null == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime,
+                      as String,
           )
           as $Val,
     );
@@ -114,7 +114,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
     String email,
     String firstName,
     String lastName,
-    DateTime createdAt,
+    String createdAt,
   });
 }
 
@@ -159,7 +159,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
         createdAt: null == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime,
+                  as String,
       ),
     );
   }
@@ -188,7 +188,7 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String lastName;
   @override
-  final DateTime createdAt;
+  final String createdAt;
 
   @override
   String toString() {
@@ -235,7 +235,7 @@ abstract class _UserModel implements UserModel {
     required final String email,
     required final String firstName,
     required final String lastName,
-    required final DateTime createdAt,
+    required final String createdAt,
   }) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -250,7 +250,7 @@ abstract class _UserModel implements UserModel {
   @override
   String get lastName;
   @override
-  DateTime get createdAt;
+  String get createdAt;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

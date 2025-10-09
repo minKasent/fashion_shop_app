@@ -1,4 +1,6 @@
 import 'package:fashion_shop/router/route_name.dart';
+import 'package:fashion_shop/screens/address/add_address_screen.dart';
+import 'package:fashion_shop/screens/address/address_screen.dart';
 import 'package:fashion_shop/screens/home/home_screen.dart';
 import 'package:fashion_shop/screens/create_account/create_account_screen.dart';
 import 'package:fashion_shop/screens/setting/setting_screen.dart';
@@ -10,31 +12,13 @@ class AppRouter {
   static final router = GoRouter(
     initialLocation: RouteName.splash,
     routes: [
-      GoRoute(
-        path: RouteName.splash,
-        name: RouteName.splash,
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: RouteName.signIn,
-        name: RouteName.signIn,
-        builder: (context, state) => const SignInScreen(),
-      ),
-      GoRoute(
-        path: RouteName.createAccount,
-        name: RouteName.createAccount,
-        builder: (context, state) => const CreateAccountScreen(),
-      ),
-      GoRoute(
-        path: RouteName.home,
-        name: RouteName.home,
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: RouteName.setting,
-        name: RouteName.setting,
-        builder: (context, state) => const SettingScreen(),
-      ),
+      GoRoute(path: RouteName.splash, name: RouteName.splash, builder: (context, state) => const SplashScreen()),
+      GoRoute(path: RouteName.signIn, name: RouteName.signIn, builder: (context, state) => const SignInScreen()),
+      GoRoute(path: RouteName.createAccount, name: RouteName.createAccount, builder: (context, state) => const CreateAccountScreen()),
+      GoRoute(path: RouteName.home, name: RouteName.home, builder: (context, state) => const HomeScreen()),
+      GoRoute(path: RouteName.setting, name: RouteName.setting, builder: (context, state) => const SettingScreen()),
+      GoRoute(path: RouteName.address, name: RouteName.address, builder: (context, state) => const AddressScreen()),
+      GoRoute(path: RouteName.addAddress, name: RouteName.addAddress, builder: (context, state) => const AddAddressScreen()),
     ],
   );
 }

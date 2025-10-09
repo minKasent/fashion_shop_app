@@ -10,10 +10,8 @@ class UserModel with _$UserModel {
     required String email,
     required String firstName,
     required String lastName,
-    required DateTime createdAt,
+    required String createdAt,
   }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 }
-
