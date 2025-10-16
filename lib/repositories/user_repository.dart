@@ -1,5 +1,6 @@
 import 'package:fashion_shop/core/logging/app_logger.dart';
 import 'package:fashion_shop/models/address_model.dart';
+import 'package:fashion_shop/models/card_model.dart';
 import 'package:fashion_shop/models/user_model.dart';
 import 'package:fashion_shop/services/remote/firebase_service.dart';
 import 'package:injectable/injectable.dart';
@@ -21,9 +22,15 @@ class UserRepository {
   }
 
   /// Update user info
-  Future<void> updateUserInfo({required String firstName, required String lastName}) async {
+  Future<void> updateUserInfo({
+    required String firstName,
+    required String lastName,
+  }) async {
     try {
-      await _firebaseService.updateUserInfo(firstName: firstName, lastName: lastName);
+      await _firebaseService.updateUserInfo(
+        firstName: firstName,
+        lastName: lastName,
+      );
       _logger.i('User info updated successfully');
     } catch (e, stackTrace) {
       _logger.e('Error updating user info', error: e, stackTrace: stackTrace);
@@ -67,11 +74,18 @@ class UserRepository {
   /// Get user addresses
   Future<List<AddressModel>> getUserAddresses() async {
     try {
-      final List<AddressModel> addresses = await _firebaseService.getUserAddresses();
-      _logger.i('User addresses retrieved successfully: ${addresses.length} addresses');
+      final List<AddressModel> addresses = await _firebaseService
+          .getUserAddresses();
+      _logger.i(
+        'User addresses retrieved successfully: ${addresses.length} addresses',
+      );
       return addresses;
     } catch (e, stackTrace) {
-      _logger.e('Error getting user addresses', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error getting user addresses',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -96,7 +110,11 @@ class UserRepository {
       );
       _logger.i('User address updated successfully');
     } catch (e, stackTrace) {
-      _logger.e('Error updating user address', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error updating user address',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -107,7 +125,105 @@ class UserRepository {
       await _firebaseService.deleteUserAddress(addressId: addressId);
       _logger.i('User address deleted successfully');
     } catch (e, stackTrace) {
-      _logger.e('Error deleting user address', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error deleting user address',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Add user payment card
+  Future<CardModel> addUserCard({
+    required String cardNumber,
+    required String cardholderName,
+    required String expiryDate,
+    required String cvv,
+    required String cardType,
+    bool isDefault = false,
+  }) async {
+    try {
+      final CardModel card = await _firebaseService.addUserCard(
+        cardNumber: cardNumber,
+        cardholderName: cardholderName,
+        expiryDate: expiryDate,
+        cvv: cvv,
+        cardType: cardType,
+        isDefault: isDefault,
+      );
+      _logger.i('User payment card added successfully');
+      return card;
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error adding user payment card',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Get user payment cards
+  Future<List<CardModel>> getUserCards() async {
+    try {
+      final List<CardModel> cards = await _firebaseService.getUserCards();
+      _logger.i(
+        'User payment cards retrieved successfully: ${cards.length} cards',
+      );
+      return cards;
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error getting user payment cards',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Update user payment card
+  Future<void> updateUserCard({
+    required String cardId,
+    required String cardNumber,
+    required String cardholderName,
+    required String expiryDate,
+    required String cvv,
+    required String cardType,
+    bool isDefault = false,
+  }) async {
+    try {
+      await _firebaseService.updateUserCard(
+        cardId: cardId,
+        cardNumber: cardNumber,
+        cardholderName: cardholderName,
+        expiryDate: expiryDate,
+        cvv: cvv,
+        cardType: cardType,
+        isDefault: isDefault,
+      );
+      _logger.i('User payment card updated successfully');
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error updating user payment card',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Delete user payment card
+  Future<void> deleteUserCard({required String cardId}) async {
+    try {
+      await _firebaseService.deleteUserCard(cardId: cardId);
+      _logger.i('User payment card deleted successfully');
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error deleting user payment card',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }

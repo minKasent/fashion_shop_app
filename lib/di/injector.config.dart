@@ -16,6 +16,9 @@ import 'package:fashion_shop/di/third_party_module.dart' as _i252;
 import 'package:fashion_shop/repositories/auth_repository.dart' as _i840;
 import 'package:fashion_shop/repositories/user_repository.dart' as _i37;
 import 'package:fashion_shop/screens/address/cubit/address_cubit.dart' as _i273;
+import 'package:fashion_shop/screens/dashboard/cubit/dashboard_cubit.dart'
+    as _i115;
+import 'package:fashion_shop/screens/payment/cubit/payment_cubit.dart' as _i648;
 import 'package:fashion_shop/screens/setting/cubit/setting_cubit.dart' as _i325;
 import 'package:fashion_shop/services/remote/firebase_service.dart' as _i488;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
@@ -41,6 +44,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i59.FirebaseAuth>(() => thirdPartyModule.auth);
     gh.lazySingleton<_i974.FirebaseFirestore>(() => thirdPartyModule.firestore);
+    gh.lazySingleton<_i115.DashboardCubit>(() => _i115.DashboardCubit());
     gh.lazySingleton<_i673.AppLogger>(() => _i1049.ConsoleAppLogger());
     gh.lazySingleton<_i488.FirebaseService>(
       () => _i488.FirebaseService(
@@ -68,6 +72,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i325.SettingCubit>(
       () =>
           _i325.SettingCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
+    );
+    gh.lazySingleton<_i648.PaymentCubit>(
+      () =>
+          _i648.PaymentCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
     );
     return this;
   }

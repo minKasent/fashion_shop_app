@@ -10,10 +10,20 @@ class CreateAccountCubit extends Cubit<CreateAccountState> {
   final AppLogger _logger = getIt<AppLogger>();
   CreateAccountCubit() : super(const CreateAccountState());
 
-  Future<void> createAccount({required String email, required String password, required String firstName, required String lastName}) async {
+  Future<void> createAccount({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+  }) async {
     emit(state.copyWith(isLoading: true));
     try {
-      await _authRepository.createUserWithEmailAndPassword(email: email, password: password, firstName: firstName, lastName: lastName);
+      await _authRepository.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+      );
       emit(state.copyWith(isSuccess: true));
     } catch (e, stackTrace) {
       emit(state.copyWith(apiErrorMessage: e.toString()));

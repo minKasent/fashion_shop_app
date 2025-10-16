@@ -10,10 +10,16 @@ class SignInCubit extends Cubit<SignInState> {
   final AppLogger _logger = getIt<AppLogger>();
   SignInCubit() : super(SignInState());
 
-  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     emit(state.copyWith(isLoading: true));
     try {
-      await _authRepository.signInWithEmailAndPassword(email: email, password: password);
+      await _authRepository.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       emit(state.copyWith(isSuccess: true));
     } catch (e, stackTrace) {
       emit(state.copyWith(apiErrorMessage: e.toString()));

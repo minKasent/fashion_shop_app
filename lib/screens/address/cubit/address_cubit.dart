@@ -10,7 +10,8 @@ class AddressCubit extends Cubit<AddressState> {
   final UserRepository _userRepository;
   final AppLogger _logger;
 
-  AddressCubit(this._userRepository, this._logger) : super(const AddressState());
+  AddressCubit(this._userRepository, this._logger)
+    : super(const AddressState());
 
   /// Load all addresses for current user
   Future<void> loadAddresses() async {
@@ -37,7 +38,13 @@ class AddressCubit extends Cubit<AddressState> {
   }) async {
     emit(state.copyWith(isLoading: true, apiErrorMessage: ''));
     try {
-      await _userRepository.addUserAddress(streetAddress: streetAddress, city: city, state: stateValue, zipCode: zipCode, isDefault: isDefault);
+      await _userRepository.addUserAddress(
+        streetAddress: streetAddress,
+        city: city,
+        state: stateValue,
+        zipCode: zipCode,
+        isDefault: isDefault,
+      );
       // Reload addresses after successful addition
       await loadAddresses();
       _logger.i('Address added successfully');

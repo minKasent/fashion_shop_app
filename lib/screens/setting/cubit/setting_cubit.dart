@@ -9,7 +9,8 @@ class SettingCubit extends Cubit<SettingState> {
   final UserRepository _userRepository;
   final AppLogger _logger;
 
-  SettingCubit(this._userRepository, this._logger) : super(const SettingState());
+  SettingCubit(this._userRepository, this._logger)
+    : super(const SettingState());
 
   Future<void> loadUserInfo() async {
     emit(state.copyWith(isLoading: true));
@@ -29,10 +30,16 @@ class SettingCubit extends Cubit<SettingState> {
   }
 
   /// Update user info
-  Future<void> updateUserInfo({required String firstName, required String lastName}) async {
+  Future<void> updateUserInfo({
+    required String firstName,
+    required String lastName,
+  }) async {
     emit(state.copyWith(isLoading: true, apiErrorMessage: ''));
     try {
-      await _userRepository.updateUserInfo(firstName: firstName, lastName: lastName);
+      await _userRepository.updateUserInfo(
+        firstName: firstName,
+        lastName: lastName,
+      );
       // Reload user info after successful update
       await loadUserInfo();
       _logger.i('User info updated successfully');

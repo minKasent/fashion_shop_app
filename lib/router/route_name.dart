@@ -6,4 +6,7 @@ class RouteName {
   static const String setting = '/setting';
   static const String address = '/address';
   static const String addAddress = '/add-address';
+  static const String payment = '/payment';
+  static const String addCard = '/add-card';
+  static const String notification = '/notification';
 }

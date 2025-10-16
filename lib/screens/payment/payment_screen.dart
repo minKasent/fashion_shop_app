@@ -1,8 +1,8 @@
 import 'package:fashion_shop/di/injector.dart';
-import 'package:fashion_shop/models/address_model.dart';
+import 'package:fashion_shop/models/card_model.dart';
 import 'package:fashion_shop/router/route_name.dart';
-import 'package:fashion_shop/screens/address/cubit/address_cubit.dart';
-import 'package:fashion_shop/screens/address/cubit/address_state.dart';
+import 'package:fashion_shop/screens/payment/cubit/payment_cubit.dart';
+import 'package:fashion_shop/screens/payment/cubit/payment_state.dart';
 import 'package:fashion_shop/shared/app_color_schemes.dart';
 import 'package:fashion_shop/shared/app_text.dart';
 import 'package:fashion_shop/shared/app_typography.dart';
@@ -11,20 +11,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class AddressScreen extends StatelessWidget {
-  const AddressScreen({super.key});
+class PaymentScreen extends StatelessWidget {
+  const PaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AddressCubit>()..loadAddresses(),
-      child: const _AddressScreenView(),
+    return BlocProvider.value(
+      value: getIt<PaymentCubit>()..loadCards(),
+      child: const _PaymentScreenView(),
     );
   }
 }
 
-class _AddressScreenView extends StatelessWidget {
-  const _AddressScreenView();
+class _PaymentScreenView extends StatelessWidget {
+  const _PaymentScreenView();
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,12 @@ class _AddressScreenView extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios, color: AppColorSchemes.black),
         ),
         title: AppText(
-          content: "Address",
+          content: "Payment",
           style: AppTypography.text16w500.copyWith(fontWeight: FontWeight.w700),
         ),
         centerTitle: true,
       ),
-      body: BlocConsumer<AddressCubit, AddressState>(
+      body: BlocConsumer<PaymentCubit, PaymentState>(
         listener: (context, state) {
           if (state.apiErrorMessage.isNotEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -52,11 +52,11 @@ class _AddressScreenView extends StatelessWidget {
                 backgroundColor: Colors.red,
               ),
             );
-            context.read<AddressCubit>().clearErrorMessage();
+            context.read<PaymentCubit>().clearErrorMessage();
           }
         },
         builder: (context, state) {
-          if (state.isLoading && state.addresses.isEmpty) {
+          if (state.isLoading && state.cards.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -65,22 +65,22 @@ class _AddressScreenView extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  child: state.addresses.isEmpty
+                  child: state.cards.isEmpty
                       ? Center(
                           child: AppText(
-                            content: "No addresses found",
+                            content: "Chưa có Card nào",
                             style: AppTypography.text16w500.copyWith(
                               color: AppColorSchemes.darkGrey,
                             ),
                           ),
                         )
                       : ListView.separated(
-                          itemCount: state.addresses.length,
+                          itemCount: state.cards.length,
                           separatorBuilder: (context, index) =>
                               SizedBox(height: 12.h),
                           itemBuilder: (context, index) {
-                            final AddressModel address = state.addresses[index];
-                            return _buildAddressItem(context, address);
+                            final CardModel card = state.cards[index];
+                            return _buildCardItem(context, card);
                           },
                         ),
                 ),
@@ -89,8 +89,8 @@ class _AddressScreenView extends StatelessWidget {
                   width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
-                      context.read<AddressCubit>().setSelectedAddress(null);
-                      context.push(RouteName.addAddress);
+                      context.read<PaymentCubit>().setSelectedCard(null);
+                      context.push(RouteName.addCard);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -100,7 +100,7 @@ class _AddressScreenView extends StatelessWidget {
                       ),
                       child: Center(
                         child: AppText(
-                          content: "Add Address",
+                          content: "Add Card",
                           style: AppTypography.text16w500.copyWith(
                             color: AppColorSchemes.white,
                           ),
@@ -117,7 +117,10 @@ class _AddressScreenView extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressItem(BuildContext context, AddressModel address) {
+  Widget _buildCardItem(BuildContext context, CardModel card) {
+    final String maskedCardNumber =
+        '**** ${card.cardNumber.substring(card.cardNumber.length - 4)}';
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -131,15 +134,14 @@ class _AddressScreenView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
-                  content: address.streetAddress,
+                  content: maskedCardNumber,
                   style: AppTypography.text16w500.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(height: 4.h),
                 AppText(
-                  content:
-                      "${address.city}, ${address.state} ${address.zipCode}",
+                  content: card.cardholderName,
                   style: AppTypography.text12w450.copyWith(
                     color: AppColorSchemes.darkGrey,
                   ),
@@ -149,8 +151,8 @@ class _AddressScreenView extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              context.read<AddressCubit>().setSelectedAddress(address);
-              context.push(RouteName.addAddress);
+              context.read<PaymentCubit>().setSelectedCard(card);
+              context.push(RouteName.addCard);
             },
             child: AppText(
               content: "Edit",

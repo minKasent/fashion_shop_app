@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fashion_shop/core/logging/app_logger.dart';
 import 'package:fashion_shop/models/address_model.dart';
+import 'package:fashion_shop/models/card_model.dart';
 import 'package:fashion_shop/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
@@ -23,7 +24,10 @@ class FirebaseService {
   }) async {
     try {
       /// register user in firebase auth
-      final user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      final user = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       /// store user data in firestore
       await _firestore.collection('users').doc(user.user?.uid).set({
@@ -34,17 +38,28 @@ class FirebaseService {
         'createdAt': DateTime.now().toIso8601String(),
       });
     } catch (e, stackTrace) {
-      _logger.e('Error creating user with email and password', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error creating user with email and password',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
 
   /// sign in with email and password
-  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e, stackTrace) {
-      _logger.e('Error signing in with email and password', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error signing in with email and password',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -52,9 +67,14 @@ class FirebaseService {
   /// get info user
   Future<UserModel?> getUserInfo() async {
     try {
-      final DocumentSnapshot<Map<String, dynamic>> userDoc = await _firestore.collection('users').doc(getCurrentUserId()).get();
+      final DocumentSnapshot<Map<String, dynamic>> userDoc = await _firestore
+          .collection('users')
+          .doc(getCurrentUserId())
+          .get();
       if (!userDoc.exists) {
-        _logger.w('User document does not exist for uid: ${getCurrentUserId()}');
+        _logger.w(
+          'User document does not exist for uid: ${getCurrentUserId()}',
+        );
         return null;
       }
       final Map<String, dynamic> userData = userDoc.data()!;
@@ -72,7 +92,10 @@ class FirebaseService {
   }
 
   /// update user info in firestore
-  Future<void> updateUserInfo({required String firstName, required String lastName}) async {
+  Future<void> updateUserInfo({
+    required String firstName,
+    required String lastName,
+  }) async {
     try {
       final currentUser = _auth.currentUser;
       if (currentUser != null) {
@@ -149,17 +172,24 @@ class FirebaseService {
         throw Exception('No authenticated user found');
       }
 
-      final QuerySnapshot<Map<String, dynamic>> addressSnapshot = await _firestore
-          .collection('addresses')
-          .where('userId', isEqualTo: currentUserId)
-          .get();
+      final QuerySnapshot<Map<String, dynamic>> addressSnapshot =
+          await _firestore
+              .collection('addresses')
+              .where('userId', isEqualTo: currentUserId)
+              .get();
 
-      final List<AddressModel> addresses = addressSnapshot.docs.map((doc) => AddressModel.fromJson(doc.data())).toList();
+      final List<AddressModel> addresses = addressSnapshot.docs
+          .map((doc) => AddressModel.fromJson(doc.data()))
+          .toList();
 
       _logger.i('Retrieved ${addresses.length} addresses for user');
       return addresses;
     } catch (e, stackTrace) {
-      _logger.e('Error getting user addresses', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error getting user addresses',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -180,7 +210,10 @@ class FirebaseService {
       }
 
       // Verify the address belongs to the current user
-      final DocumentSnapshot<Map<String, dynamic>> addressDoc = await _firestore.collection('addresses').doc(addressId).get();
+      final DocumentSnapshot<Map<String, dynamic>> addressDoc = await _firestore
+          .collection('addresses')
+          .doc(addressId)
+          .get();
 
       if (!addressDoc.exists) {
         throw Exception('Address not found');
@@ -202,7 +235,11 @@ class FirebaseService {
 
       _logger.i('Address updated successfully');
     } catch (e, stackTrace) {
-      _logger.e('Error updating user address', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error updating user address',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
@@ -216,7 +253,10 @@ class FirebaseService {
       }
 
       // Verify the address belongs to the current user
-      final DocumentSnapshot<Map<String, dynamic>> addressDoc = await _firestore.collection('addresses').doc(addressId).get();
+      final DocumentSnapshot<Map<String, dynamic>> addressDoc = await _firestore
+          .collection('addresses')
+          .doc(addressId)
+          .get();
 
       if (!addressDoc.exists) {
         throw Exception('Address not found');
@@ -230,7 +270,173 @@ class FirebaseService {
       await _firestore.collection('addresses').doc(addressId).delete();
       _logger.i('Address deleted successfully');
     } catch (e, stackTrace) {
-      _logger.e('Error deleting user address', error: e, stackTrace: stackTrace);
+      _logger.e(
+        'Error deleting user address',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  Future<CardModel> addUserCard({
+    required String cardNumber,
+    required String cardholderName,
+    required String expiryDate,
+    required String cvv,
+    required String cardType,
+    bool isDefault = false,
+  }) async {
+    try {
+      final String? currentUserId = getCurrentUserId();
+      if (currentUserId == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      final String cardId = _firestore.collection('cards').doc().id;
+      final String now = DateTime.now().toIso8601String();
+
+      final Map<String, dynamic> cardData = {
+        'id': cardId,
+        'userId': currentUserId,
+        'cardNumber': cardNumber,
+        'cardholderName': cardholderName,
+        'expiryDate': expiryDate,
+        'cvv': cvv,
+        'cardType': cardType,
+        'isDefault': isDefault,
+        'createdAt': now,
+        'updatedAt': now,
+      };
+
+      await _firestore.collection('cards').doc(cardId).set(cardData);
+
+      final CardModel card = CardModel.fromJson(cardData);
+
+      _logger.i('Payment card added successfully with ID: $cardId');
+      return card;
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error adding user payment card',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Get user payment cards
+  Future<List<CardModel>> getUserCards() async {
+    try {
+      final String? currentUserId = getCurrentUserId();
+      if (currentUserId == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      final QuerySnapshot<Map<String, dynamic>> cardSnapshot = await _firestore
+          .collection('cards')
+          .where('userId', isEqualTo: currentUserId)
+          .get();
+
+      final List<CardModel> cards = cardSnapshot.docs
+          .map((doc) => CardModel.fromJson(doc.data()))
+          .toList();
+
+      _logger.i('Retrieved ${cards.length} payment cards for user');
+      return cards;
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error getting user payment cards',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Update user payment card
+  Future<void> updateUserCard({
+    required String cardId,
+    required String cardNumber,
+    required String cardholderName,
+    required String expiryDate,
+    required String cvv,
+    required String cardType,
+    bool isDefault = false,
+  }) async {
+    try {
+      final String? currentUserId = getCurrentUserId();
+      if (currentUserId == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      // Verify the card belongs to the current user
+      final DocumentSnapshot<Map<String, dynamic>> cardDoc = await _firestore
+          .collection('cards')
+          .doc(cardId)
+          .get();
+
+      if (!cardDoc.exists) {
+        throw Exception('Payment card not found');
+      }
+
+      final Map<String, dynamic>? cardData = cardDoc.data();
+      if (cardData?['userId'] != currentUserId) {
+        throw Exception('Payment card does not belong to current user');
+      }
+
+      await _firestore.collection('cards').doc(cardId).update({
+        'cardNumber': cardNumber,
+        'cardholderName': cardholderName,
+        'expiryDate': expiryDate,
+        'cvv': cvv,
+        'cardType': cardType,
+        'isDefault': isDefault,
+        'updatedAt': DateTime.now().toIso8601String(),
+      });
+
+      _logger.i('Payment card updated successfully');
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error updating user payment card',
+        error: e,
+        stackTrace: stackTrace,
+      );
+      rethrow;
+    }
+  }
+
+  /// Delete user payment card
+  Future<void> deleteUserCard({required String cardId}) async {
+    try {
+      final String? currentUserId = getCurrentUserId();
+      if (currentUserId == null) {
+        throw Exception('No authenticated user found');
+      }
+
+      // Verify the card belongs to the current user
+      final DocumentSnapshot<Map<String, dynamic>> cardDoc = await _firestore
+          .collection('cards')
+          .doc(cardId)
+          .get();
+
+      if (!cardDoc.exists) {
+        throw Exception('Payment card not found');
+      }
+
+      final Map<String, dynamic>? cardData = cardDoc.data();
+      if (cardData?['userId'] != currentUserId) {
+        throw Exception('Payment card does not belong to current user');
+      }
+
+      await _firestore.collection('cards').doc(cardId).delete();
+      _logger.i('Payment card deleted successfully');
+    } catch (e, stackTrace) {
+      _logger.e(
+        'Error deleting user payment card',
+        error: e,
+        stackTrace: stackTrace,
+      );
       rethrow;
     }
   }
