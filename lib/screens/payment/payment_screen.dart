@@ -16,10 +16,7 @@ class PaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: getIt<PaymentCubit>()..loadCards(),
-      child: const _PaymentScreenView(),
-    );
+    return BlocProvider.value(value: getIt<PaymentCubit>()..loadCards(), child: const _PaymentScreenView());
   }
 }
 
@@ -46,12 +43,7 @@ class _PaymentScreenView extends StatelessWidget {
       body: BlocConsumer<PaymentCubit, PaymentState>(
         listener: (context, state) {
           if (state.apiErrorMessage.isNotEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.apiErrorMessage),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.apiErrorMessage), backgroundColor: Colors.red));
             context.read<PaymentCubit>().clearErrorMessage();
           }
         },
@@ -69,15 +61,12 @@ class _PaymentScreenView extends StatelessWidget {
                       ? Center(
                           child: AppText(
                             content: "Chưa có Card nào",
-                            style: AppTypography.text16w500.copyWith(
-                              color: AppColorSchemes.darkGrey,
-                            ),
+                            style: AppTypography.text16w500.copyWith(color: AppColorSchemes.darkGrey),
                           ),
                         )
                       : ListView.separated(
                           itemCount: state.cards.length,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 12.h),
+                          separatorBuilder: (context, index) => SizedBox(height: 12.h),
                           itemBuilder: (context, index) {
                             final CardModel card = state.cards[index];
                             return _buildCardItem(context, card);
@@ -94,16 +83,11 @@ class _PaymentScreenView extends StatelessWidget {
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 16.h),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: AppColorSchemes.purple,
-                      ),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColorSchemes.purple),
                       child: Center(
                         child: AppText(
                           content: "Add Card",
-                          style: AppTypography.text16w500.copyWith(
-                            color: AppColorSchemes.white,
-                          ),
+                          style: AppTypography.text16w500.copyWith(color: AppColorSchemes.white),
                         ),
                       ),
                     ),
@@ -118,15 +102,11 @@ class _PaymentScreenView extends StatelessWidget {
   }
 
   Widget _buildCardItem(BuildContext context, CardModel card) {
-    final String maskedCardNumber =
-        '**** ${card.cardNumber.substring(card.cardNumber.length - 4)}';
+    final String maskedCardNumber = '**** ${card.cardNumber.substring(card.cardNumber.length - 4)}';
 
     return Container(
       padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColorSchemes.grey,
-        borderRadius: BorderRadius.circular(8),
-      ),
+      decoration: BoxDecoration(color: AppColorSchemes.grey, borderRadius: BorderRadius.circular(8)),
       child: Row(
         children: [
           Expanded(
@@ -135,16 +115,12 @@ class _PaymentScreenView extends StatelessWidget {
               children: [
                 AppText(
                   content: maskedCardNumber,
-                  style: AppTypography.text16w500.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppTypography.text16w500.copyWith(fontWeight: FontWeight.w600),
                 ),
                 SizedBox(height: 4.h),
                 AppText(
                   content: card.cardholderName,
-                  style: AppTypography.text12w450.copyWith(
-                    color: AppColorSchemes.darkGrey,
-                  ),
+                  style: AppTypography.text12w450.copyWith(color: AppColorSchemes.darkGrey),
                 ),
               ],
             ),
@@ -156,9 +132,7 @@ class _PaymentScreenView extends StatelessWidget {
             },
             child: AppText(
               content: "Edit",
-              style: AppTypography.text12w450.copyWith(
-                color: AppColorSchemes.purple,
-              ),
+              style: AppTypography.text12w450.copyWith(color: AppColorSchemes.purple),
             ),
           ),
         ],

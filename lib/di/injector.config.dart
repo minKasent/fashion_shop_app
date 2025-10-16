@@ -12,6 +12,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:fashion_shop/core/logging/app_logger.dart' as _i673;
 import 'package:fashion_shop/core/logging/console_app_logger.dart' as _i1049;
+import 'package:fashion_shop/di/notification_module.dart' as _i721;
 import 'package:fashion_shop/di/third_party_module.dart' as _i252;
 import 'package:fashion_shop/repositories/auth_repository.dart' as _i840;
 import 'package:fashion_shop/repositories/user_repository.dart' as _i37;
@@ -20,8 +21,13 @@ import 'package:fashion_shop/screens/dashboard/cubit/dashboard_cubit.dart'
     as _i115;
 import 'package:fashion_shop/screens/payment/cubit/payment_cubit.dart' as _i648;
 import 'package:fashion_shop/screens/setting/cubit/setting_cubit.dart' as _i325;
+import 'package:fashion_shop/services/notification/notification_service.dart'
+    as _i933;
 import 'package:fashion_shop/services/remote/firebase_service.dart' as _i488;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
+import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'
+    as _i163;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -35,6 +41,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final thirdPartyModule = _$ThirdPartyModule();
+    final notificationModule = _$NotificationModule();
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => thirdPartyModule.sharedPrefrences(),
       preResolve: true,
@@ -42,9 +49,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i558.FlutterSecureStorage>(
       () => thirdPartyModule.secureStorage(),
     );
+    gh.singleton<_i892.FirebaseMessaging>(
+      () => notificationModule.firebaseMessaging,
+    );
+    gh.singleton<_i163.FlutterLocalNotificationsPlugin>(
+      () => notificationModule.localNotifications,
+    );
     gh.lazySingleton<_i59.FirebaseAuth>(() => thirdPartyModule.auth);
     gh.lazySingleton<_i974.FirebaseFirestore>(() => thirdPartyModule.firestore);
     gh.lazySingleton<_i115.DashboardCubit>(() => _i115.DashboardCubit());
+    gh.singleton<_i933.NotificationService>(
+      () => _i933.NotificationService(
+        gh<_i892.FirebaseMessaging>(),
+        gh<_i163.FlutterLocalNotificationsPlugin>(),
+      ),
+    );
     gh.lazySingleton<_i673.AppLogger>(() => _i1049.ConsoleAppLogger());
     gh.lazySingleton<_i488.FirebaseService>(
       () => _i488.FirebaseService(
@@ -65,6 +84,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i673.AppLogger>(),
       ),
     );
+    gh.lazySingleton<_i648.PaymentCubit>(
+      () =>
+          _i648.PaymentCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
+    );
     gh.lazySingleton<_i273.AddressCubit>(
       () =>
           _i273.AddressCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
@@ -73,12 +96,10 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i325.SettingCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
     );
-    gh.lazySingleton<_i648.PaymentCubit>(
-      () =>
-          _i648.PaymentCubit(gh<_i37.UserRepository>(), gh<_i673.AppLogger>()),
-    );
     return this;
   }
 }
 
 class _$ThirdPartyModule extends _i252.ThirdPartyModule {}
+
+class _$NotificationModule extends _i721.NotificationModule {}
