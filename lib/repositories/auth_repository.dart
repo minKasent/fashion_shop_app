@@ -1,5 +1,6 @@
 import 'package:fashion_shop/core/logging/app_logger.dart';
 import 'package:fashion_shop/services/remote/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -28,6 +29,15 @@ class AuthRepository {
       await _firebaseService.signInWithEmailAndPassword(email: email, password: password);
     } catch (e, stackTrace) {
       _logger.e('Error signing in with email and password', error: e, stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      await _firebaseService.signInWithGoogle();
+    } catch (e, stackTrace) {
+      _logger.e('Error signing in with Google', error: e, stackTrace: stackTrace);
       rethrow;
     }
   }

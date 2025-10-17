@@ -12,7 +12,20 @@
           "package_name": "com.example.fashion_shop"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "274977013835-hn961ndfcfiqoqjanfia8pp0ob5ut5da.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fashion_shop",
+            "certificate_hash": "727365eb9e1424c2d9da00f49872e5316e7c4ac4"
+          }
+        },
+        {
+          "client_id": "274977013835-ecosbjaqtf4q2bsbudijrm3ahn7unab2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA355mLE2QQ6_aJ_oD51iOrZnzhHLIxQIc"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "274977013835-ecosbjaqtf4q2bsbudijrm3ahn7unab2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "274977013835-nrfps64blggii9p97tsgcmtaip3b200j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fashionShop"
+              }
+            }
+          ]
         }
       }
     }

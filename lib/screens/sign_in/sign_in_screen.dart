@@ -73,7 +73,10 @@ class _SignInViewState extends State<SignInView> {
                   SizedBox(height: 50.h),
                   _buildLoginWidget(iconPath: Assets.icons.apple.path, title: 'Continue With Apple'),
                   SizedBox(height: 20.h),
-                  _buildLoginWidget(iconPath: Assets.icons.google.path, title: 'Continue With Google'),
+                  GestureDetector(
+                    onTap: () => context.read<SignInCubit>().signInWithGoogle(),
+                    child: _buildLoginWidget(iconPath: Assets.icons.google.path, title: 'Continue With Google'),
+                  ),
                   SizedBox(height: 20.h),
                   _buildLoginWidget(iconPath: Assets.icons.facebook.path, title: 'Continue With Facebook'),
                 ],

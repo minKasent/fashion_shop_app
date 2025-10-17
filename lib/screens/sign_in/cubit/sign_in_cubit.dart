@@ -10,17 +10,28 @@ class SignInCubit extends Cubit<SignInState> {
   final AppLogger _logger = getIt<AppLogger>();
   SignInCubit() : super(SignInState());
 
-  Future<void> signInWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
     emit(state.copyWith(isLoading: true));
     try {
-      await _authRepository.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _authRepository.signInWithEmailAndPassword(email: email, password: password);
       emit(state.copyWith(isSuccess: true));
+    } catch (e, stackTrace) {
+      emit(state.copyWith(apiErrorMessage: e.toString()));
+      _logger.e(e, stackTrace: stackTrace);
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      final userCredential = await _authRepository.signInWithGoogle();
+      // if (userCredential != null) {
+      //   emit(state.copyWith(isSuccess: true));
+      // } else {
+      //   emit(state.copyWith(apiErrorMessage: 'Google sign-in was cancelled'));
+      // }
     } catch (e, stackTrace) {
       emit(state.copyWith(apiErrorMessage: e.toString()));
       _logger.e(e, stackTrace: stackTrace);
